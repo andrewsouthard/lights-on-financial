@@ -1,0 +1,158 @@
+body {
+    /*
+    background: url("../images/single-lightbulb.jpg");
+    background-size: 800px 600px;
+    background-repeat: no-repeat;
+    border: 1px solid red;
+    */
+}
+.container-fluid {
+    margin: 0px;
+}
+.nopadding {
+ padding: 0px !important;
+}
+header {
+    border: 1px solid #fa851e;
+    background-color: #fa851e;
+    color: white;
+    margin: 0px !important;
+}
+header ul {
+    margin: 0px;
+    padding: 10px 5px;
+}
+header ul li:first-child {
+margin-left: 5px;
+}
+header ul li {
+    display: inline-block;
+    padding: 0px;
+    margin-left: 0px;
+    margin-right: 5px;
+}
+header a {
+    color: white;
+    padding: 10px 10px;
+}
+header li:hover {
+    color: #fa851e;
+    background-color: white;
+}
+header li:hover a,
+header li a.active {
+    color: #fa851e;
+    background-color: white;
+    text-decoration: none;
+}
+header li a.active {
+    color: #fa851e;
+    background-color: white;
+}
+.lof-btn {
+    background-color: #fa851e;
+    padding: 10px 20px;
+    margin: 0px 10px 0px 0px;
+    border-radius: 20px;
+    color: white;
+    border: 0px;
+}
+.lof-btn:hover {
+    cursor: pointer;
+    text-decoration: none;
+    color: white;
+}
+ul#importActions li {
+    display: inline-block;
+}
+/* Get started page */
+#basic-info .form-group {
+    max-width: 400px;
+}
+.valid {
+    border: 1px solid green !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
+.invalid {
+    border: 1px solid red !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
+input[type="file"] {
+    display: none;
+}
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+#file-upload {
+   display: none;
+}
+#uploadForm {
+    margin-top: 15px;
+}
+#listOfSpreadsheets {
+    max-width: 500px;
+    margin: 20px auto;
+}
+#listOfSpreadsheets h2 {
+    text-align: center;
+}
+#spreadsheets {
+    list-style: none;
+    text-align: left;
+}
+#spreadsheets > li + li {
+    margin-top: 3px;
+    border-top: 1px solid #eee;
+}
+#spreadsheets > li {
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+#spreadsheets li .filepath {
+    display: none;
+}
+#spreadsheets > li > ul {
+    float: right;
+}
+#spreadsheets > li > ul > li + li {
+    border-left: 1px solid #ccc;
+    padding-left: 5px;
+}
+#spreadsheets > li > ul > li {
+display: inline-block;
+}
+#spreadsheets li ul li:hover {
+    cursor: pointer;
+}
+#file-upload #files {
+    list-style-type: none;
+    vertical-align: middle;
+    padding-left: 0px;
+    display: none;
+}
+#file-upload #files .status {
+    padding-left: 5px;
+    vertical-align: middle;
+}
+#files .remove {
+    cursor: pointer;
+    text-align: center;
+}
+#files .remove span {
+}
+#file-upload #errorMessage {
+    font-weight: bold;
+    color: red;
+}
+#file-upload button[type=submit] {
+    margin-top: 15px;
+}
+#ending-message,
+#payment-subsection {
+   display: none;
+}
