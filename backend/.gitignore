@@ -1,0 +1,8 @@
+bin/
+lib/
+cpanm
+lof.sqlite
+*.qfx
+*.ofx
+.DS_Store
+budget-sheet.xlsx

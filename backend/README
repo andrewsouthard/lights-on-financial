@@ -1,0 +1,31 @@
+##########
+# README #
+##########
+
+INSTALLATION
+
+NOTE: Perl 5.8 or greater must be installed on the system before beginning!
+
+Install the prerequisites by running the following command:
+
+bash localSetup.sh
+
+This will install all required Perl modules in the current directory without affecting
+the system configuration.
+
+
+USAGE
+
+Download QFX/OFX files from your financial institutions. This is usually under the transactions
+or transactions history section of the website. Make sure to select the date range you would
+like to generate a spreadsheet for.
+
+Once your QFX/OFX files have been downloaded, run the import command for each file:
+
+perl import.pl myfile.QFX
+
+After all files have been imported, run the following command to generate an Excel spreadsheet:
+
+perl outToSpreadsheet.pl
+
+The resulting spreadsheet will be in the current directory with the name budget-spreadsheet.xlsx.
