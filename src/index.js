@@ -69,7 +69,7 @@ const createWindow = () => {
 };
 /* Define a function to setup error logging */
 const showError = message => {
-  dialog.showMessageBox({ type: "error", buttons: [], message: message });
+  dialog.showMessageBox({ type: "error", buttons: [], message });
   if (DEBUG) console.log(message);
 };
 

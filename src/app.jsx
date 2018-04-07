@@ -1,24 +1,39 @@
 import React from "react";
+/* Import the IPC object to setup listening. */
+import { ipcRenderer as ipc } from "electron";
 /* Import the router items */
-import { Route } from "react-router";
+import { Switch, Route } from "react-router";
 import { BrowserRouter as Router } from "react-router-dom";
 /* Import the redux items and reducers */
-import { createStore } from "redux";
+import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import rootReducer from "./reducers/root";
+/* Import redux-saga and sagas */
+import createSagaMiddleware from "redux-saga";
+import sagas from "./sagas";
 /* Import pages */
 import Header from "./components/Header";
 import Home from "./pages/Home";
 import CreateSpreadsheet from "./pages/CreateSpreadsheet";
 
-const store = createStore(rootReducer);
+/* Create the saga middleware, store and run the middleware */
+const sagaMiddleware = createSagaMiddleware();
+const store = createStore(rootReducer, applyMiddleware(sagaMiddleware));
+sagaMiddleware.run(sagas);
 
-// Now you can dispatch navigation actions from anywhere!
-// store.dispatch(push('/foo'))
-/*
-            <Route path="/about" component={About} />
-            <Route path="/topics" component={Topics} />
-            */
+store.dispatch({ type: "INITIALIZE_APP" });
+
+/* Setup IPC Listeners. All we will do is dispatch actions from here. All data
+   parsing and logic is in the reducers.
+*/
+ipc.on("zero-spreadsheets-list", event => {
+  store.dispatch({ type: "UPDATE_SPREADSHEETS", list: [] });
+});
+
+ipc.on("spreadsheets-list", (event, spreadsheets) => {
+  store.dispatch({ type: "UPDATE_SPREADSHEETS", list: spreadsheets });
+});
+
 export default class App extends React.Component {
   render() {
     return (
@@ -26,8 +41,10 @@ export default class App extends React.Component {
         <Router>
           <div>
             <Header />
-            <Route path="/createspreadsheet" component={CreateSpreadsheet} />
-            <Route exact path="/" component={Home} />
+            <Switch>
+              <Route path="/createspreadsheet" component={CreateSpreadsheet} />
+              <Route path="/" component={Home} />
+            </Switch>
           </div>
         </Router>
       </Provider>

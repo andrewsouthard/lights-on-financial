@@ -1,7 +1,9 @@
 import { combineReducers } from "redux";
+import cs from "./import";
+import spreadsheets from "./spreadsheets";
 
-const myReducer = {};
 const rootReducer = combineReducers({
-  mr: myReducer,
+  create: cs,
+  spreadsheets,
 });
 export default rootReducer;

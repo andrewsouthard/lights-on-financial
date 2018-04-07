@@ -101,6 +101,10 @@ input[type="file"] {
 #listOfSpreadsheets h2 {
     text-align: center;
 }
+#listOfSpreadsheets > div {
+    text-align: center;
+    color: #888;
+}
 #spreadsheets {
     list-style: none;
     text-align: left;
@@ -142,8 +146,6 @@ display: inline-block;
 #files .remove {
     cursor: pointer;
     text-align: center;
-}
-#files .remove span {
 }
 #file-upload #errorMessage {
     font-weight: bold;

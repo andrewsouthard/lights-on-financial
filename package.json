@@ -5,7 +5,7 @@
   "description": "My Electron application description",
   "main": "src/index.js",
   "scripts": {
-    "start": "electron-forge start",
+    "start": "electron-forge start --enable-logging",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
@@ -47,6 +47,9 @@
     }
   },
   "dependencies": {
+    "@fortawesome/fontawesome": "^1.1.5",
+    "@fortawesome/fontawesome-free-solid": "^5.0.9",
+    "@fortawesome/react-fontawesome": "^0.0.18",
     "bootstrap": "^4.0.0",
     "electron-compile": "^6.4.2",
     "electron-devtools-installer": "^2.1.0",
@@ -62,12 +65,14 @@
     "react-router-dom": "^4.2.2",
     "react-router-redux": "^4.0.8",
     "redux": "^3.7.2",
+    "redux-saga": "^0.16.0",
     "sql.js": "^0.5.0",
     "util.promisify": "^1.0.0"
   },
   "devDependencies": {
     "babel-plugin-transform-async-to-generator": "^6.24.1",
     "babel-plugin-transform-es2015-classes": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "electron-forge": "^5.1.1",
