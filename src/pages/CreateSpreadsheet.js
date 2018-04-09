@@ -1,11 +1,13 @@
 import React from "react";
 import FilesList from "../components/FilesList";
 import ImportActions from "../components/ImportActions";
+import SpreadsheetPending from "../components/SpreadsheetPending";
 
 export default class CreateSpreadsheet extends React.Component {
   render() {
     return (
-      <div className="container-fluid">
+      <div>
+        <SpreadsheetPending />
         <div className="row">
           <div className="col">
             <FilesList />

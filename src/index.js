@@ -20,7 +20,7 @@ let mainWindow;
 // Constants
 const OUTPUT_DIR = app.getAppPath();
 const DATABASE = path.join(OUTPUT_DIR, "backend/lof.sqlite");
-const DEBUG = 0;
+const DEBUG = 1;
 const appState = {
   accounts: [],
   overwriteTransactions: 0,
@@ -69,8 +69,8 @@ const createWindow = () => {
 };
 /* Define a function to setup error logging */
 const showError = message => {
-  dialog.showMessageBox({ type: "error", buttons: [], message });
   if (DEBUG) console.log(message);
+  dialog.showMessageBox({ type: "error", buttons: [], message });
 };
 
 const access = promisify(fs.access);
@@ -219,7 +219,7 @@ const createSpreadsheet = async (event, name, shouldClearDB, filesObj) => {
       event.sender.send("zero-spreadsheets-list");
     }
 
-    // Navigate to the main page
+    /* Navigate to the main page
     await mainWindow.loadURL(
       url.format({
         pathname: path.join(OUTPUT_DIR, "index.html"),
@@ -227,6 +227,7 @@ const createSpreadsheet = async (event, name, shouldClearDB, filesObj) => {
         slashes: true,
       })
     );
+    */
 
     // WHEN READY
     await event.sender.send("spreadsheet-ready", name);

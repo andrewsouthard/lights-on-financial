@@ -34,6 +34,10 @@ ipc.on("spreadsheets-list", (event, spreadsheets) => {
   store.dispatch({ type: "UPDATE_SPREADSHEETS", list: spreadsheets });
 });
 
+ipc.on("spreadsheet-ready", (event, name) => {
+  store.dispatch({ type: "SPREADSHEET_READY", name });
+});
+
 export default class App extends React.Component {
   render() {
     return (
