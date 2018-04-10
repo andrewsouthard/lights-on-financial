@@ -23,6 +23,7 @@ const DATABASE = path.join(OUTPUT_DIR, "backend/lof.sqlite");
 const DEBUG = 1;
 const appState = {
   accounts: [],
+  categories: [],
   overwriteTransactions: 0,
   rules: [],
   spreadsheets: [],
@@ -95,19 +96,28 @@ const updateAppState = async () => {
   }
   /* See if the database exists. If so, populate the appState. */
   try {
+    await process.chdir(path.join(OUTPUT_DIR, "backend"));
+    await execFileSync("perl", ["createDatabase.pl"]);
     await access(DATABASE, fs.constants.R_OK | fs.constants.W_OK);
+
     const filebuffer = fs.readFileSync(DATABASE);
 
     // Load the db
     const db = new sql.Database(filebuffer);
     // Clear the current settings
     appState.accounts = [];
+    appState.categories = [];
     appState.rules = [];
     appState.transactions = [];
 
     let stmt = db.prepare("SELECT * FROM accounts");
     while (stmt.step()) {
       appState.accounts.push(stmt.getAsObject());
+    }
+
+    stmt = db.prepare("SELECT * FROM categories");
+    while (stmt.step()) {
+      appState.categories.push(stmt.getAsObject());
     }
 
     stmt = db.prepare("SELECT * FROM rules");
@@ -142,11 +152,9 @@ const performSetup = async () => {
 app.on("ready", createWindow);
 app.on("ready", performSetup);
 ipc.on("ready", event => {
-  if (appState.spreadsheets.length) {
-    event.sender.send("spreadsheets-list", appState.spreadsheets);
-  } else {
-    event.sender.send("zero-spreadsheets-list", appState.spreadsheets);
-  }
+  event.sender.send("spreadsheets-list", appState.spreadsheets);
+  event.sender.send("rules-list", appState.rules);
+  event.sender.send("categories-list", appState.categories);
 });
 
 // Quit when all windows are closed.
@@ -261,6 +269,12 @@ ipc.on("create-spreadsheet", createSpreadsheet);
 ipc.on("delete-spreadsheet", deleteSpreadsheet);
 ipc.on("get-transactions", event => {
   event.sender.send("transactions-sent", appState.transactions);
+});
+ipc.on("get-rules", event => {
+  event.sender.send("rules-sent", appState.rules);
+});
+ipc.on("get-categories", event => {
+  event.sender.send("categories-sent", appState.categories);
 });
 ipc.on("open-file-dialog", event => {
   const files = dialog.showOpenDialog({

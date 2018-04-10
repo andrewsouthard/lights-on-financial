@@ -25,6 +25,7 @@ my %REGEX = (
     'integer' => qr/[0-9]+/,
 );
 use lib './lib/perl5/';
+use DBI;
 use Class::Tiny qw(message);
 
 #####################################################################

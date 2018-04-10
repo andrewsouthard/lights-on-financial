@@ -15,6 +15,8 @@ import sagas from "./sagas";
 import Header from "./components/Header";
 import Home from "./pages/Home";
 import CreateSpreadsheet from "./pages/CreateSpreadsheet";
+import TransactionCategories from "./pages/TransactionCategories";
+import TaggingRules from "./pages/TaggingRules";
 
 /* Create the saga middleware, store and run the middleware */
 const sagaMiddleware = createSagaMiddleware();
@@ -26,14 +28,16 @@ store.dispatch({ type: "INITIALIZE_APP" });
 /* Setup IPC Listeners. All we will do is dispatch actions from here. All data
    parsing and logic is in the reducers.
 */
-ipc.on("zero-spreadsheets-list", event => {
-  store.dispatch({ type: "UPDATE_SPREADSHEETS", list: [] });
-});
 
 ipc.on("spreadsheets-list", (event, spreadsheets) => {
   store.dispatch({ type: "UPDATE_SPREADSHEETS", list: spreadsheets });
 });
-
+ipc.on("categories-list", (event, categories) => {
+  store.dispatch({ type: "UPDATE_CATEGORIES", list: categories });
+});
+ipc.on("rules-list", (event, rules) => {
+  store.dispatch({ type: "UPDATE_RULES", list: rules });
+});
 ipc.on("spreadsheet-ready", (event, name) => {
   store.dispatch({ type: "SPREADSHEET_READY", name });
 });
@@ -47,6 +51,11 @@ export default class App extends React.Component {
             <Header />
             <Switch>
               <Route path="/createspreadsheet" component={CreateSpreadsheet} />
+              <Route
+                path="/transactioncategories"
+                component={TransactionCategories}
+              />
+              <Route path="/taggingrules" component={TaggingRules} />
               <Route path="/" component={Home} />
             </Switch>
           </div>

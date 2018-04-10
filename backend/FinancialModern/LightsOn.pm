@@ -41,8 +41,31 @@ sub initializeDatabase {
     #push(@tables,"CREATE TABLE tags (id INTEGER PRIMARY KEY, name VARCHAR(255) NOT NULL, category VARCHAR(255) NOT NULL)");
     push(@tables,"CREATE TABLE rules (id INTEGER PRIMARY KEY, category VARCHAR(255) NOT NULL, tomatch VARCHAR(255) NOT NULL)");
     push(@tables,"CREATE TABLE todos (id INTEGER PRIMARY KEY, type VARCHAR(50) NOT NULL, need VARCHAR(50) NOT NULL, given VARCHAR(255))");
+    push(@tables,"CREATE TABLE categories (id INTEGER PRIMARY KEY, name VARCHAR(80) NOT NULL, income BOOL NOT NULL)");
     #id|acctID|balance|amount|type|date|description|category|importID
     push(@tables,"CREATE TABLE transactions (id INTEGER PRIMARY KEY, acctId VARCHAR(50) NOT NULL, balance DECIMAL(13,2), amount DECIMAL(13,2), type TINYINT(1), date INTEGER, description VARCHAR(255), category VARCHAR(255), importID INTEGER NOT NULL, transID VARCHAR(255) UNIQUE)");
+ 
+    # DEFAULT CATEGORIES
+    my @defaultCategories = (
+    'Clothing|0',
+    'Donations|0',
+    'Education|0',
+    'Food|0',
+    'Gifts|0',
+    'Healthcare|0',
+    'Housing/Household|0',
+    'Media & Entertainment|0',
+    'Miscellaneous|0',
+    'Subscriptions/Memberships|0',
+    'Taxes|0',
+    'Transportation|0',
+    'Utilities|0',
+    'Vacation|0',
+    # Income categories
+    'Salary|1',
+    'Interest|1',
+    'Investments|1',
+    );
     
     # DEFAULT RULES
     my @defaultRules = (
@@ -87,6 +110,18 @@ sub initializeDatabase {
         eval { $dbh->do($table) };
         if($@) {
             print "Creating user database table failed! $@ ";
+            goto FAIL;
+        }
+    }
+
+    # Add default categories
+    foreach my $cat (@defaultCategories) {
+        (my $name ,my $income) = split('\|',$cat);
+        my $statement = "INSERT INTO categories values(NULL,'$name','$income')";
+        eval { $dbh->do($statement) };
+        if($@) {
+            print "Inserting category failed! $@\n";
+            print "$statement\n";
             goto FAIL;
         }
     }

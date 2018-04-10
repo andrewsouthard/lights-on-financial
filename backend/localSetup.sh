@@ -6,7 +6,7 @@ if [[ ! -f ./cpanm ]]; then
 fi
 INSTALL_CMD="./cpanm -L ./"
 
-for pkg in Class::Tiny DBD::mysql DBD::SQLite Excel::Writer::XLSX DateTime JSON Email::Stuffer DBI Text::CSV
+for pkg in Class::Tiny DBD::SQLite Excel::Writer::XLSX DateTime JSON Email::Stuffer DBI Text::CSV
 do
     $INSTALL_CMD $pkg
 done
