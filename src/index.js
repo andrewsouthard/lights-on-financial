@@ -9,6 +9,7 @@ import url from "url";
 import sql from "sql.js";
 import path from "path";
 import { promisify } from "util";
+import _ from "lodash/core";
 
 // Create a file execer object.
 import { execFileSync } from "child_process";
@@ -115,12 +116,12 @@ const updateAppState = async () => {
       appState.accounts.push(stmt.getAsObject());
     }
 
-    stmt = db.prepare("SELECT * FROM categories");
+    stmt = db.prepare("SELECT * FROM categories ORDER BY name");
     while (stmt.step()) {
       appState.categories.push(stmt.getAsObject());
     }
 
-    stmt = db.prepare("SELECT * FROM rules");
+    stmt = db.prepare("SELECT * FROM rules ORDER BY category");
     while (stmt.step()) {
       appState.rules.push(stmt.getAsObject());
     }
@@ -174,6 +175,53 @@ app.on("activate", () => {
   }
 });
 
+const saveRules = async (event, rules) => {
+  try {
+    // Load the db
+    const filebuffer = fs.readFileSync(DATABASE);
+    const db = new sql.Database(filebuffer);
+
+    console.log(appState.rules);
+    let sqlStr = "";
+    /* Process all of the new and updated rules */
+    rules.forEach(rule => {
+      const existingRule = appState.rules.find(r => _.isEqual(r, rule));
+      if (!existingRule) {
+        if (typeof rule.id !== "number") {
+          sqlStr += `INSERT INTO rules VALUES(NULL,"${rule.name}","${
+            rule.tomatch
+          }");`;
+        } else {
+          sqlStr += `UPDATE rules SET category="${rule.name}",tomatch="${
+            rule.tomatch
+          }" WHERE id=${rule.id};`;
+        }
+      }
+    });
+    /* Process any of the deleted rules. */
+    appState.rules.forEach(rule => {
+      console.log(rule);
+      const existingRule = rules.find(r => r.id === rule.id);
+      if (!existingRule) {
+        sqlStr += `DELETE FROM rules WHERE id=${rule.id};`;
+      }
+    });
+    if (DEBUG) console.log(sqlStr);
+    /* Update the database */
+    db.exec(sqlStr);
+    /* Write the db to disk. */
+    const data = db.export();
+    const buffer = Buffer.alloc(data.length, data);
+    fs.writeFileSync(DATABASE, buffer);
+    db.close();
+    /* Update the app state from the db */
+    await updateAppState();
+    /* Send the renderer the updated rules */
+    event.sender.send("save-rules-complete", appState.rules);
+  } catch (error) {
+    showError(error);
+  }
+};
 const createSpreadsheet = async (event, name, shouldClearDB, filesObj) => {
   try {
     await process.chdir(path.join(OUTPUT_DIR, "backend"));
@@ -209,7 +257,7 @@ const createSpreadsheet = async (event, name, shouldClearDB, filesObj) => {
 
         // Load the db
         const db = new sql.Database(filebuffer);
-        db.exec("DELETE  FROM transactions");
+        db.exec("DELETE FROM transactions");
         const data = db.export();
         const buffer = Buffer.alloc(data.length, data);
         fs.writeFileSync(DATABASE, buffer);
@@ -276,6 +324,7 @@ ipc.on("get-rules", event => {
 ipc.on("get-categories", event => {
   event.sender.send("categories-sent", appState.categories);
 });
+ipc.on("save-rules", saveRules);
 ipc.on("open-file-dialog", event => {
   const files = dialog.showOpenDialog({
     properties: ["openFile"],

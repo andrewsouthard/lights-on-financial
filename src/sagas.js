@@ -99,11 +99,26 @@ function* clearSpreadsheets() {
   yield put({ type: "CLEAR_SPREADSHEETS" });
 }
 
+const getRules = state => state.rules.list;
+const getDirty = state => state.rules.isDirty;
+
+function* saveRules(action) {
+  const isDirty = yield select(getDirty);
+  const rules = yield select(getRules);
+  if (isDirty) {
+    ipc.send("save-rules", rules);
+  } else {
+    /* The rules don't need to be saved. */
+    yield put({ type: "RESET_RULES" });
+  }
+}
+
 function* sagas() {
   yield takeEvery("INITIALIZE_APP", initApp);
   yield takeEvery("OPEN_FILE", openFile);
   yield takeEvery("SPREADSHEET_READY", clearSpreadsheets);
   yield takeEvery("GENERATE_SPREADSHEET", generateSpreadsheet);
+  yield takeEvery("SAVE_RULES", saveRules);
   yield takeEvery("SELECT_IMPORT_FILE", importFile);
   yield takeEvery("DELETE_FILE", deleteFile);
 }

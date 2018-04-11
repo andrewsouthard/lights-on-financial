@@ -36,10 +36,13 @@ ipc.on("categories-list", (event, categories) => {
   store.dispatch({ type: "UPDATE_CATEGORIES", list: categories });
 });
 ipc.on("rules-list", (event, rules) => {
-  store.dispatch({ type: "UPDATE_RULES", list: rules });
+  store.dispatch({ type: "UPDATE_ALL_RULES", list: rules });
 });
 ipc.on("spreadsheet-ready", (event, name) => {
   store.dispatch({ type: "SPREADSHEET_READY", name });
+});
+ipc.on("save-rules-complete", (event, rules) => {
+  store.dispatch({ type: "UPDATE_ALL_RULES", list: rules });
 });
 
 export default class App extends React.Component {

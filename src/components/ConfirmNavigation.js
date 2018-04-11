@@ -1,13 +1,13 @@
 import React from "react";
 import NavigationPrompt from "react-router-navigation-prompt";
 
-const ConfirmNavigation = () => {
+const ConfirmNavigation = (isDirty, sendClearState) => {
   return (
     <NavigationPrompt
       renderIfNotActive={false}
       // Confirm navigation if going to a path that does not start with current path:
       when={(crntLocation, nextLocation) =>
-        !nextLocation.pathname.startsWith(crntLocation.pathname)
+        !nextLocation.pathname.startsWith(crntLocation.pathname) && isDirty
       }>
       {({ onConfirm, onCancel }) => (
         <div id="confirmLeavePage">
@@ -15,7 +15,13 @@ const ConfirmNavigation = () => {
             Leaving will cause all changes to be discarded! Do you really want
             to leave?
           </p>
-          <a onClick={onConfirm}>Ok</a>
+          <a
+            onClick={() => {
+              sendClearState();
+              onConfirm();
+            }}>
+            Ok
+          </a>
           <a onClick={onCancel}>Cancel</a>
         </div>
       )}

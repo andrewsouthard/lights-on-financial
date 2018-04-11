@@ -5,64 +5,79 @@ import faTimes from "@fortawesome/fontawesome-free-solid/faTimes";
 import CategorySelector from "../components/CategorySelector";
 import ConfirmNavigation from "../components/ConfirmNavigation";
 
+const ruleRow = (rule, categories, update, remove) => {
+  const createNewRule = (id, event) => {
+    const item = event.target.parentNode.parentNode.querySelector("select");
+    const cat = item.options[item.selectedIndex].text;
+    const match = event.target.value;
+    update({
+      id: id,
+      name: cat,
+      tomatch: match,
+    });
+  };
+  return (
+    <tr key={rule.id}>
+      <td onClick={() => remove(rule)}>
+        <FontAwesomeIcon icon={faTimes} />
+      </td>
+      <td>
+        <CategorySelector
+          id={rule.id}
+          active={rule.category}
+          items={categories}
+          onChange={update}
+        />
+      </td>
+      <td>
+        <input
+          value={rule.tomatch}
+          type="text"
+          onChange={event => createNewRule(rule.id, event)}
+        />
+      </td>
+    </tr>
+  );
+};
+
 class TR extends React.Component {
   render() {
-    const { categories, rules, updateRule, saveRules } = this.props;
-
-    const createNewRule = (id, event, preformSave) => {
-      const item = event.target.parentNode.parentNode.querySelector("select");
-      const cat = item.options[item.selectedIndex].text;
-      const match = event.target.value;
-      preformSave({
-        id: id,
-        name: cat,
-        tomatch: match,
-      });
-    };
+    const {
+      categories,
+      rules,
+      isDirty,
+      addRule,
+      updateRule,
+      removeRule,
+      saveRules,
+      resetRules,
+    } = this.props;
     return (
       <div>
-        <ConfirmNavigation />
+        {ConfirmNavigation(isDirty, resetRules)}
         <div className="row" style={{ textAlign: "center" }}>
           <div className="col">
-            <h1>Tagging Rules</h1>
-            <a className="lof-btn">Add Rule</a>
+            <h2>Tagging Rules</h2>
+            <br />
+            <a className="lof-btn" onClick={() => addRule()}>
+              Add Rule
+            </a>
             <a className="lof-btn" onClick={() => saveRules()}>
               Save Changes
             </a>
             <br />
-            <table className="table table-striped">
+            <br />
+            <table id="rules" className="table table-striped">
               <tbody>
                 <tr>
                   <th>Remove</th>
                   <th>Category</th>
                   <th>Rule</th>
                 </tr>
-                {rules.map((rule, index) => {
-                  return (
-                    <tr key={rule.id}>
-                      <td onClick={() => console.log("remove")}>
-                        <FontAwesomeIcon icon={faTimes} />
-                      </td>
-                      <td>
-                        <CategorySelector
-                          id={rule.id}
-                          active={rule.category}
-                          items={categories}
-                          onChange={updateRule}
-                        />
-                      </td>
-                      <td>
-                        <input
-                          value={rule.tomatch}
-                          type="text"
-                          onChange={event =>
-                            createNewRule(rule.id, event, updateRule)
-                          }
-                        />
-                      </td>
-                    </tr>
-                  );
-                })}
+                {rules &&
+                  rules.map(rule =>
+                    ruleRow(rule, categories, updateRule, removeRule)
+                  )}
               </tbody>
             </table>
           </div>
@@ -73,12 +88,15 @@ class TR extends React.Component {
 }
 const mapStateToProps = state => ({
   categories: state.categories.list,
+  isDirty: state.rules.isDirty,
   rules: state.rules.list,
-  newrules: state.rules.newRules.length,
 });
 const mapDispatchToProps = dispatch => ({
+  addRule: () => dispatch({ type: "ADD_RULE" }),
   saveRules: () => dispatch({ type: "SAVE_RULES" }),
-  updateRule: newRule => dispatch({ type: "UPDATE_NEW_RULES", rule: newRule }),
+  updateRule: rule => dispatch({ type: "UPDATE_RULE", rule }),
+  removeRule: rule => dispatch({ type: "REMOVE_RULE", rule }),
+  resetRules: () => dispatch({ type: "RESET_RULES" }),
 });
 const TaggingRules = connect(mapStateToProps, mapDispatchToProps)(TR);
 export default TaggingRules;

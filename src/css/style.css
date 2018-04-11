@@ -54,7 +54,7 @@ header li a.active {
     padding: 10px 20px;
     margin: 0px 10px 0px 0px;
     border-radius: 20px;
-    color: white;
+    color: white !important;
     border: 0px;
 }
 .lof-btn:hover {
@@ -194,5 +194,8 @@ display: inline-block;
     color: white;
 }
 #confirmLeavePage a:hover {
+    cursor: pointer;
+}
+table#rules tr > td:first-child {
     cursor: pointer;
 }

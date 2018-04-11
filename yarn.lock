@@ -3705,6 +3705,10 @@ locate-path@^2.0.0:
     p-locate "^2.0.0"
     path-exists "^3.0.0"
 
+lodash-core@^0.8.1:
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/lodash-core/-/lodash-core-0.8.1.tgz#c278404cedfd11ac6b9cc73f16693af039442402"
+
 lodash-es@^4.17.5, lodash-es@^4.2.1:
   version "4.17.8"
   resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.8.tgz#6fa8c8c5d337481df0bdf1c0d899d42473121e45"

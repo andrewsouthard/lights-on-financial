@@ -1,28 +1,64 @@
+import lodash from "lodash/core";
+
 const initialState = {
+  initialList: [],
   list: [],
-  newRules: [],
+  isDirty: false,
 };
+const emptyRule = {
+  id: "",
+  name: "",
+  tomatch: "",
+};
+let numNewRules = 0;
+let idx;
 const rules = (state = initialState, action) => {
   switch (action.type) {
-    case "XXX_UPDATE_RULES":
+    case "REMOVE_RULE":
+      idx = state.list.findIndex(r => r === action.rule);
+      const newList = [
+        ...state.list.slice(0, idx),
+        ...state.list.slice(idx + 1),
+      ];
       return {
         ...state,
-        names: [
-          ...state.names.slice(0, idx),
-          action.name,
-          ...state.names.slice(idx + 1),
+        isDirty: !lodash.isEqual(state.initialList, newList),
+        list: newList,
+      };
+    case "ADD_RULE":
+      return {
+        ...state,
+        isDirty: true,
+        list: [{ ...emptyRule, id: "NR-" + ++numNewRules }, ...state.list],
+      };
+    case "UPDATE_RULE":
+      idx = state.list.findIndex(r => r.id === action.rule.id);
+      let setDirty = false;
+      if (idx < 0 || !lodash.isEqual(action.rule, state.initialList[idx])) {
+        setDirty = true;
+      }
+      return {
+        ...state,
+        isDirty: setDirty,
+        list: [
+          ...state.list.slice(0, idx),
+          action.rule,
+          ...state.list.slice(idx + 1),
         ],
       };
-    case "UPDATE_NEW_RULES":
+    case "RESET_RULES":
+      return {
+        ...initialState,
+        initialList: state.initialList,
+        list: state.initialList,
+      };
+    case "UPDATE_ALL_RULES":
       return {
         ...state,
-        newRules: [...state.newRules, action.rule],
+        isDirty: false,
+        list: action.list,
+        initialList: action.list,
       };
-    case "SAVE_RULES":
-      console.log(state.newRules);
-      return state;
-    case "UPDATE_RULES":
-      return { ...state, list: action.list };
     default:
       return state;
   }
