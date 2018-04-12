@@ -175,13 +175,57 @@ app.on("activate", () => {
   }
 });
 
+const saveCategories = async (event, categories) => {
+  try {
+    // Load the db
+    const filebuffer = fs.readFileSync(DATABASE);
+    const db = new sql.Database(filebuffer);
+
+    let sqlStr = "";
+    /* Process all of the new and updated categories. */
+    categories.forEach(cat => {
+      const existingCat = appState.categories.find(c => _.isEqual(c, cat));
+      if (!existingCat) {
+        if (typeof cat.id !== "number") {
+          sqlStr += `INSERT INTO categories VALUES(NULL,"${cat.name}","${
+            cat.income
+          }");`;
+        } else {
+          sqlStr += `UPDATE categories SET name="${cat.name}",income=${
+            cat.income
+          }" WHERE id=${cat.id};`;
+        }
+      }
+    });
+    /* Process any of the deleted categories. */
+    appState.categories.forEach(cat => {
+      const existingCat = categories.find(c => c.id === cat.id);
+      if (!existingCat) {
+        sqlStr += `DELETE FROM categories WHERE id=${cat.id};`;
+      }
+    });
+    if (DEBUG) console.log(sqlStr);
+    /* Update the database */
+    db.exec(sqlStr);
+    /* Write the db to disk. */
+    const data = db.export();
+    const buffer = Buffer.alloc(data.length, data);
+    fs.writeFileSync(DATABASE, buffer);
+    db.close();
+    /* Update the app state from the db */
+    await updateAppState();
+    /* Send the renderer the updated rules */
+    event.sender.send("save-categories-complete", appState.categories);
+  } catch (error) {
+    showError(error);
+  }
+};
 const saveRules = async (event, rules) => {
   try {
     // Load the db
     const filebuffer = fs.readFileSync(DATABASE);
     const db = new sql.Database(filebuffer);
 
-    console.log(appState.rules);
     let sqlStr = "";
     /* Process all of the new and updated rules */
     rules.forEach(rule => {
@@ -200,7 +244,6 @@ const saveRules = async (event, rules) => {
     });
     /* Process any of the deleted rules. */
     appState.rules.forEach(rule => {
-      console.log(rule);
       const existingRule = rules.find(r => r.id === rule.id);
       if (!existingRule) {
         sqlStr += `DELETE FROM rules WHERE id=${rule.id};`;
@@ -324,6 +367,7 @@ ipc.on("get-rules", event => {
 ipc.on("get-categories", event => {
   event.sender.send("categories-sent", appState.categories);
 });
+ipc.on("save-categories", saveCategories);
 ipc.on("save-rules", saveRules);
 ipc.on("open-file-dialog", event => {
   const files = dialog.showOpenDialog({

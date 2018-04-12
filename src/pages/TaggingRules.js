@@ -11,7 +11,7 @@ const ruleRow = (rule, categories, update, remove) => {
     const cat = item.options[item.selectedIndex].text;
     const match = event.target.value;
     update({
-      id: id,
+      id,
       name: cat,
       tomatch: match,
     });

@@ -79,7 +79,7 @@ function* generateSpreadsheet(action) {
   }
 
   const d = new Date();
-  let name =
+  const name =
     "cashflow" +
     "-" +
     d.getFullYear() +
@@ -102,7 +102,7 @@ function* clearSpreadsheets() {
 const getRules = state => state.rules.list;
 const getDirty = state => state.rules.isDirty;
 
-function* saveRules(action) {
+function* saveRules() {
   const isDirty = yield select(getDirty);
   const rules = yield select(getRules);
   if (isDirty) {
@@ -113,11 +113,26 @@ function* saveRules(action) {
   }
 }
 
+const getCategories = state => state.categories.list;
+const getDirtyCategories = state => state.categories.isDirty;
+
+function* saveCategories() {
+  const isDirty = yield select(getDirtyCategories);
+  const categories = yield select(getCategories);
+  if (isDirty) {
+    ipc.send("save-categories", categories);
+  } else {
+    /* The rules don't need to be saved. */
+    yield put({ type: "RESET_CATEGORIES" });
+  }
+}
+
 function* sagas() {
   yield takeEvery("INITIALIZE_APP", initApp);
   yield takeEvery("OPEN_FILE", openFile);
   yield takeEvery("SPREADSHEET_READY", clearSpreadsheets);
   yield takeEvery("GENERATE_SPREADSHEET", generateSpreadsheet);
+  yield takeEvery("SAVE_CATEGORIES", saveCategories);
   yield takeEvery("SAVE_RULES", saveRules);
   yield takeEvery("SELECT_IMPORT_FILE", importFile);
   yield takeEvery("DELETE_FILE", deleteFile);

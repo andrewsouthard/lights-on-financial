@@ -44,6 +44,9 @@ ipc.on("spreadsheet-ready", (event, name) => {
 ipc.on("save-rules-complete", (event, rules) => {
   store.dispatch({ type: "UPDATE_ALL_RULES", list: rules });
 });
+ipc.on("save-categories-complete", (event, categories) => {
+  store.dispatch({ type: "UPDATE_CATEGORIES", list: categories });
+});
 
 export default class App extends React.Component {
   render() {
