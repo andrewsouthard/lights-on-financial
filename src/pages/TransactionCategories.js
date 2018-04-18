@@ -69,7 +69,7 @@ class TC extends React.Component {
       <div>
         {ConfirmNavigation(isDirty, resetCategories)}
         <div className="row" style={{ textAlign: "center" }}>
-          <div className="col">
+          <div style={{ marginTop: 20 }} className="col">
             <h2>Transaction Categories</h2>
             <br />
             <a className="lof-btn" onClick={() => addCategory()}>

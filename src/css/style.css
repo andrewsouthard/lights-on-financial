@@ -147,6 +147,9 @@ display: inline-block;
     cursor: pointer;
     text-align: center;
 }
+table#files {
+    margin 10px auto;
+}
 #file-upload #errorMessage {
     font-weight: bold;
     color: red;

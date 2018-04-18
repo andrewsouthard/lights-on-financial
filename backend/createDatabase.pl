@@ -7,10 +7,11 @@ use lib ".";
 use FinancialModern::LightsOn;
 
 # Parse the imput arguments
+my $database = $ARGV[0];
 my $reInitDB = $ARGV[1];
 
-my $lo = FinancialModern::LightsOn->new();
-if(! -e 'lof.sqlite' || $reInitDB) {
+if(! -e $database || $reInitDB) {
+    my $lo = FinancialModern::LightsOn->new($database);
     $lo->initializeDatabase() || do {
         print "Failed initializing database!\n";
 	exit 1;

@@ -8,8 +8,11 @@ export default class CreateSpreadsheet extends React.Component {
     return (
       <div>
         <SpreadsheetPending />
-        <div className="row">
-          <div className="col">
+        <div className="row" style={{ textAlign: "center" }}>
+          <div style={{ marginTop: 20 }} className="col">
+            <h2>Create Spreadsheet</h2>
+            <br />
+            <br />
             <FilesList />
             <br />
             <span id="errorMessage" />

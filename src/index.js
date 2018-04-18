@@ -19,8 +19,9 @@ import { execFileSync } from "child_process";
 let mainWindow;
 
 // Constants
-const OUTPUT_DIR = app.getAppPath();
-const DATABASE = path.join(OUTPUT_DIR, "backend/lof.sqlite");
+const SRC_DIR = app.getAppPath();
+const OUTPUT_DIR = app.getPath("userData");
+const DATABASE = path.join(OUTPUT_DIR, "lof.sqlite");
 const DEBUG = 1;
 const appState = {
   accounts: [],
@@ -48,7 +49,7 @@ const createWindow = () => {
   // and load the index.html of the app.
   mainWindow.loadURL(
     url.format({
-      pathname: path.join(OUTPUT_DIR, "src/index.html"),
+      pathname: path.join(SRC_DIR, "src/index.html"),
       protocol: "file:",
       slashes: true,
     })
@@ -70,13 +71,13 @@ const createWindow = () => {
   });
 };
 /* Define a function to setup error logging */
-const showError = message => {
+const showError = (event, message, type = "DEFAULT") => {
   if (DEBUG) console.log(message);
-  dialog.showMessageBox({ type: "error", buttons: [], message });
+  event.sender.send("internal-error", type, message);
 };
 
 const access = promisify(fs.access);
-const updateAppState = async () => {
+const updateAppState = async event => {
   try {
     await fs.readdir(OUTPUT_DIR, (err, dir) => {
       for (const filePath of dir) {
@@ -93,12 +94,12 @@ const updateAppState = async () => {
       );
     });
   } catch (err) {
-    showError(`Failed to get spreadsheets!\n ${err}`);
+    showError(event, `Failed to get spreadsheets!\n ${err}`);
   }
   /* See if the database exists. If so, populate the appState. */
   try {
-    await process.chdir(path.join(OUTPUT_DIR, "backend"));
-    await execFileSync("perl", ["createDatabase.pl"]);
+    await process.chdir(path.join(SRC_DIR, "backend"));
+    await execFileSync("perl", ["createDatabase.pl", DATABASE]);
     await access(DATABASE, fs.constants.R_OK | fs.constants.W_OK);
 
     const filebuffer = fs.readFileSync(DATABASE);
@@ -133,17 +134,17 @@ const updateAppState = async () => {
 
     stmt.free();
   } catch (err) {
-    showError(`Error updating state!\n ${err}`);
+    showError(event, `Error updating state!\n ${err}`);
     /* Trigger the database to be created. */
     appState.overwriteTransactions = 1;
   }
 };
-const performSetup = async () => {
+const performSetup = async event => {
   try {
     await access(OUTPUT_DIR, fs.constants.R_OK | fs.constants.W_OK);
-    await updateAppState();
+    await updateAppState(event);
   } catch (err) {
-    showError(`Failed to access ${OUTPUT_DIR}!\n Fatal Error!`);
+    showError(event, `Failed to access ${OUTPUT_DIR}!\n Fatal Error!`);
   }
 };
 
@@ -217,7 +218,7 @@ const saveCategories = async (event, categories) => {
     /* Send the renderer the updated rules */
     event.sender.send("save-categories-complete", appState.categories);
   } catch (error) {
-    showError(error);
+    showError(event, error);
   }
 };
 const saveRules = async (event, rules) => {
@@ -262,36 +263,11 @@ const saveRules = async (event, rules) => {
     /* Send the renderer the updated rules */
     event.sender.send("save-rules-complete", appState.rules);
   } catch (error) {
-    showError(error);
+    showError(event, error);
   }
 };
 const createSpreadsheet = async (event, name, shouldClearDB, filesObj) => {
   try {
-    await process.chdir(path.join(OUTPUT_DIR, "backend"));
-    for (const file of filesObj) {
-      const stdout = execFileSync("perl", [
-        "import.pl",
-        file.path,
-        file.nickname,
-        appState.overwriteTransactions,
-      ]);
-      if (DEBUG) {
-        console.log(stdout.toString("utf8"));
-      }
-    }
-    execFileSync("perl", ["outToSpreadsheet.pl"]);
-    console.log(`new name is ${name}`);
-
-    await fs.rename(
-      path.join(OUTPUT_DIR, "backend/budget-sheet.xlsx"),
-      path.join(OUTPUT_DIR, name),
-      err => {
-        if (err) {
-          showError(err);
-        }
-      }
-    );
-
     /* Clear the transactions from the database if the user requests it */
     if (shouldClearDB) {
       try {
@@ -306,9 +282,38 @@ const createSpreadsheet = async (event, name, shouldClearDB, filesObj) => {
         fs.writeFileSync(DATABASE, buffer);
         db.close();
       } catch (err) {
-        showError(`Error removing transactions from the database!\n ${err}`);
+        showError(
+          event,
+          `Error removing transactions from the database!\n ${err}`
+        );
       }
     }
+
+    await process.chdir(path.join(SRC_DIR, "backend"));
+    for (const file of filesObj) {
+      const stdout = execFileSync("perl", [
+        "import.pl",
+        file.path,
+        file.nickname,
+        appState.overwriteTransactions,
+        DATABASE,
+      ]);
+      if (DEBUG) {
+        console.log(stdout.toString("utf8"));
+      }
+    }
+    execFileSync("perl", ["outToSpreadsheet.pl", DATABASE]);
+    console.log(`new name is ${name}`);
+
+    await fs.rename(
+      path.join(OUTPUT_DIR, "budget-sheet.xlsx"),
+      path.join(OUTPUT_DIR, name),
+      err => {
+        if (err) {
+          showError(event, err);
+        }
+      }
+    );
 
     /* Update the list of spreadsheets */
     await updateAppState();
@@ -331,7 +336,7 @@ const createSpreadsheet = async (event, name, shouldClearDB, filesObj) => {
     // WHEN READY
     await event.sender.send("spreadsheet-ready", name);
   } catch (err) {
-    showError(err);
+    showError(event, err.stdout.toString(), "IMPORT");
   }
 };
 
@@ -345,11 +350,7 @@ const deleteSpreadsheet = async (event, filename) => {
     appState.spreadsheets = appState.spreadsheets.filter(
       name => name !== filename
     );
-    if (appState.spreadsheets.length) {
-      event.sender.send("spreadsheets-list", appState.spreadsheets);
-    } else {
-      event.sender.send("zero-spreadsheets-list", appState.spreadsheets);
-    }
+    event.sender.send("spreadsheets-list", appState.spreadsheets);
   } catch (err) {
     console.log(err);
     throw err;

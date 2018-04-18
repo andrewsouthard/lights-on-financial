@@ -23,6 +23,10 @@ sub new {
     my $self  = {};
     bless $self,$class;
 
+    if(defined $udb) {
+        $self->db($udb);
+    }
+
     return $self;
 }
 

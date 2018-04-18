@@ -35,7 +35,7 @@ class IActions extends React.Component {
           <input
             type="checkbox"
             name="shouldClearDB"
-            onChange={this.toggleClearDB}
+            onChange={() => this.toggleClearDB()}
           />
           <label htmlFor="shouldClearDB">
             &nbsp;Remove previously imported transactions.<br />

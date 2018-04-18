@@ -34,7 +34,7 @@ class Files extends React.Component {
         <table
           id="files"
           className="table table-condensed table-striped"
-          style={{ display: this.props.files.length ? "block" : "none" }}>
+          style={{ display: this.props.files.length ? "initial" : "none" }}>
           <tbody>
             <tr>
               <th>Remove</th>

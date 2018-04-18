@@ -6,7 +6,7 @@ package FinancialModern::Import;
 use lib '.';
 use lib './lib/perl5/';
 use parent 'FinancialModern';
-use Class::Tiny qw(message token user);
+use Class::Tiny qw(db message token user);
 use FinancialModern::UserDatabase;
 
 use DBI;
@@ -29,7 +29,7 @@ use feature "switch";
 #####################################################################
 sub new {
     my $class  = shift;
-    my $user   = shift;
+    my $db = shift;
 
 #   return undef if(! defined($user));
 
@@ -37,6 +37,9 @@ sub new {
     my $self  = {};
     bless $self,$class;
 
+    if(defined($db)) {
+        $self->db($db);
+    }
 
     # Save the user instance.
 #   $self->user($user);
@@ -90,7 +93,7 @@ sub parseIntoDatabase {
     my $acctType = undef;
     my $date  = undef;
 
-    my $userDB = FinancialModern::UserDatabase->new();
+    my $userDB = FinancialModern::UserDatabase->new($self->db);
 
     my @transactionsToAdd;
     my $transactionsAdded = 0;

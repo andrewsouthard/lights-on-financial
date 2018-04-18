@@ -47,6 +47,10 @@ ipc.on("save-rules-complete", (event, rules) => {
 ipc.on("save-categories-complete", (event, categories) => {
   store.dispatch({ type: "UPDATE_CATEGORIES", list: categories });
 });
+ipc.on("internal-error", (event, type, message) => {
+  console.log("INTERNAL ERROR");
+  store.dispatch({ type: "ERROR_MESSAGE", errorType: type, message });
+});
 
 export default class App extends React.Component {
   render() {

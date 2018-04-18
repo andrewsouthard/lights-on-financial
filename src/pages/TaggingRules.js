@@ -56,7 +56,7 @@ class TR extends React.Component {
       <div>
         {ConfirmNavigation(isDirty, resetRules)}
         <div className="row" style={{ textAlign: "center" }}>
-          <div className="col">
+          <div style={{ marginTop: 20 }} className="col">
             <h2>Tagging Rules</h2>
             <br />
             <a className="lof-btn" onClick={() => addRule()}>

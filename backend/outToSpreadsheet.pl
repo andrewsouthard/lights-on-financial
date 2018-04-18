@@ -9,11 +9,19 @@ use parent 'FinancialModern';
 use DBI;
 use Class::Tiny qw(db message);
 use Excel::Writer::XLSX;
+use File::Basename;
+use File::Spec;
 use POSIX 'strftime';
 use Time::Local;
 
 my $self  = {};
 bless $self,"";
+my $database = $ARGV[0];
+if(! -e $database) {
+        print "Database does not exist!\n";
+        exit 1;
+}
+$self->db($database);
 my $dbh = $self->_getDBH();
 
 my $sth  = $dbh->prepare('select min(date),max(date) from transactions');
@@ -34,8 +42,14 @@ my $endYear = strftime("%Y",localtime($maxDate));
 $sth->finish();
 
 my $accounts = mapAccountNames($dbh);
+# The spreadsheet will be placed in the same directory as the database.
+my $outputPath = File::Spec->catfile(dirname($database),'budget-sheet.xlsx');
 
-my $workbook  = Excel::Writer::XLSX->new('budget-sheet.xlsx');
+my $workbook  = Excel::Writer::XLSX->new($outputPath);
+unless(defined $workbook) {
+print "ERROR $@!\n";
+exit 1;
+}
 
 # Setup formats
 my $currencyFormat = $workbook->add_format();

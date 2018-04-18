@@ -52,8 +52,6 @@ function* initApp() {
 const getFilesToImport = state => state.create;
 
 function* generateSpreadsheet(action) {
-  /* Clear all errors */
-  yield put({ type: "CLEAR_IMPORT_ERROR" });
   const createObj = yield select(getFilesToImport);
   const filesObj = [];
   console.log(createObj);
@@ -72,7 +70,8 @@ function* generateSpreadsheet(action) {
 
   if (errIdx >= 0) {
     yield put({
-      type: "IMPORT_ERROR",
+      type: "ERROR_MESSAGE",
+      errorType: "IMPORT",
       message: "All accounts must have a name longer than 2 characters.",
     });
     return;
@@ -127,6 +126,23 @@ function* saveCategories() {
   }
 }
 
+function* processError(action) {
+  try {
+    if (action.errorType === "IMPORT") {
+      yield put({ type: "SPREADSHEET_ERROR" });
+    }
+    dialog.showMessageBox({
+      type: "info",
+      message: action.message.toString(),
+      buttons: ["Ok"],
+      defaultId: 1,
+    });
+  } catch (e) {
+    console.log("Error displaying error message :)");
+    console.log(e);
+  }
+}
+
 function* sagas() {
   yield takeEvery("INITIALIZE_APP", initApp);
   yield takeEvery("OPEN_FILE", openFile);
@@ -136,6 +152,7 @@ function* sagas() {
   yield takeEvery("SAVE_RULES", saveRules);
   yield takeEvery("SELECT_IMPORT_FILE", importFile);
   yield takeEvery("DELETE_FILE", deleteFile);
+  yield takeEvery("ERROR_MESSAGE", processError);
 }
 
 export default sagas;

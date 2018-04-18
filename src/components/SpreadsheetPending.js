@@ -6,8 +6,8 @@ import faSpinner from "@fortawesome/fontawesome-free-solid/faSpinner";
 
 class Pending extends React.Component {
   render() {
-    const { done, pending } = this.props;
-    if (pending === 0 && done) {
+    const { done, pending, error } = this.props;
+    if (pending === 0 && error === 0 && done) {
       return <Redirect to="/" />;
     } else if (pending && !done) {
       return (
@@ -22,6 +22,7 @@ class Pending extends React.Component {
 }
 const mapStateToProps = state => ({
   done: state.create.spreadsheetDone,
+  error: state.create.error,
   pending: state.create.spreadsheetPending,
 });
 const SpreadsheetPending = connect(mapStateToProps)(Pending);

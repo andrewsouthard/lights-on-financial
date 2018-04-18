@@ -19,7 +19,7 @@ use Digest::SHA qw(sha1_hex);
 #####################################################################
 sub new {
     my $class = shift;
-    my $user  = shift;
+    my $db = shift;
 
     # Instantiate.
     my $self  = {};
@@ -31,7 +31,9 @@ sub new {
 
     # Save the user db name for later use.
     #my $db = $user->userdb
-    my $db = 'lof.sqlite';
+    if(! defined $db) {
+        $db = 'lof.sqlite';
+    }
     $self->db($db);
 
     return $self;

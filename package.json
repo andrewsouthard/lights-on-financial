@@ -2,14 +2,15 @@
   "name": "LightsOnFinancial",
   "productName": "Lights On Financial",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "Lights On Financial Desktop App",
   "main": "src/index.js",
   "scripts": {
     "start": "electron-forge start --enable-logging",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "eslint --cache --color --ext .jsx,.js src"
+    "lint": "eslint --cache --color --ext .jsx,.js src",
+    "clean": "rm -rf out/ yarn-error.log *.xlsx"
   },
   "keywords": [],
   "author": "Andrew",
@@ -17,16 +18,9 @@
   "config": {
     "forge": {
       "make_targets": {
-        "win32": [
-          "squirrel"
-        ],
-        "darwin": [
-          "zip"
-        ],
-        "linux": [
-          "deb",
-          "rpm"
-        ]
+        "win32": ["squirrel"],
+        "darwin": ["zip"],
+        "linux": ["deb"]
       },
       "electronPackagerConfig": {
         "packageManager": "yarn"
@@ -34,8 +28,17 @@
       "electronWinstallerConfig": {
         "name": "lof_desktop"
       },
-      "electronInstallerDebian": {},
-      "electronInstallerRedhat": {},
+      "electronInstallerDebian": {
+        "icon": "icon.png",
+        "categories": ["Utility"],
+        "homepage": "https://lightsonfinancial.com"
+      },
+      "electronInstallerRedhat": {
+        "license": "Copyright Lights On Financial",
+        "requires": ["lsb", "libappindictor"],
+        "compressionLevel": 9,
+        "categories": ["Utility"]
+      },
       "github_repository": {
         "owner": "",
         "name": ""
