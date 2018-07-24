@@ -10,8 +10,7 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --cache --color --ext .jsx,.js src",
-    "clean": "rm -rf out/ yarn-error.log *.xlsx",
-    "dist": "electron-forge make --platform='win32' && electron-forge make"
+    "clean": "rm -rf out/ yarn-error.log *.xlsx"
   },
   "keywords": [],
   "author": "Andrew",
