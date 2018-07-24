@@ -8,7 +8,7 @@
     "start": "electron-forge start --enable-logging",
     "package": "electron-forge package",
     "make": "electron-forge make",
-    "publish": "electron-forge publish",
+    "publish": "electron-forge publish --auth-token=$GITHUB_TOKEN",
     "lint": "eslint --cache --color --ext .jsx,.js src",
     "clean": "rm -rf out/ yarn-error.log *.xlsx"
   },
