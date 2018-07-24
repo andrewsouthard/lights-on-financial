@@ -29,7 +29,7 @@ script:
         -v ~/.cache/electron:/root/.cache/electron \
         -v ~/.cache/electron-builder:/root/.cache/electron-builder \
         electronuserland/builder:wine \
-        /bin/bash -c "sudo apt-get update && sudo apt-get install fakeroot && yarn --link-duplicates --pure-lockfile && yarn make && yarn release"
+        /bin/bash -c "apt-get update && apt-get install -y fakeroot && yarn --link-duplicates --pure-lockfile && yarn make && yarn release"
     else
       yarn make && yarn release 
     fi
