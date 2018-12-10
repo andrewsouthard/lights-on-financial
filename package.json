@@ -1,6 +1,6 @@
 {
   "name": "LightsOnFinancial",
-  "productName": "LightsOnFinancial",
+  "productName": "Lights On Financial",
   "version": "1.0.0",
   "description": "Lights On Financial Desktop App",
   "main": "src/index.js",
@@ -26,7 +26,7 @@
         "packageManager": "yarn"
       },
       "electronWinstallerConfig": {
-        "name": "Lights On Financial"
+        "name": "LightsOnFinancial"
       },
       "electronInstallerDMG": {
         "icon": "icon.png"
