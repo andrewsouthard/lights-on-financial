@@ -10,7 +10,7 @@ matrix:
         - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
 
 
-     - os: linux
+    - os: linux
       sudo: required
       language: node_js
       node_js:
