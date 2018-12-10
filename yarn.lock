@@ -2147,9 +2147,10 @@ electron-packager@^11.0.0:
     semver "^5.3.0"
     yargs-parser "^9.0.2"
 
-electron-prebuilt-compile@^3.0.6:
+electron-prebuilt-compile@3.0.6:
   version "3.0.6"
   resolved "https://registry.yarnpkg.com/electron-prebuilt-compile/-/electron-prebuilt-compile-3.0.6.tgz#b126f4f36a17f386bd733f3cf8cf2824506f565a"
+  integrity sha512-Vn7+rA4aYNr+mlhOTa/Uin3YYyM5/DPnGk84GmFrmr9jWuN8DLGbe8TA3pGBl1UXHroNya+aTwg2fs40aUzTsQ==
   dependencies:
     babel-plugin-array-includes "^2.0.3"
     babel-plugin-transform-async-to-generator "^6.24.1"

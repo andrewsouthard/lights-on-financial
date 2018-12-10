@@ -1,6 +1,6 @@
 {
   "name": "LightsOnFinancial",
-  "productName": "Lights On Financial",
+  "productName": "LightsOnFinancial",
   "version": "1.0.0",
   "description": "Lights On Financial Desktop App",
   "main": "src/index.js",

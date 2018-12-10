@@ -9,10 +9,25 @@ matrix:
         - ELECTRON_CACHE=$HOME/.cache/electron
         - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
 
-    - os: linux
-      services: docker
-      language: generic
+
+     - os: linux
       sudo: required
+      language: node_js
+      node_js:
+        - node
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-multilib
+            - g++-8
+            - g++-multilib
+            - icnsutils
+            - graphicsmagick
+            - xz-utils
+            - xorriso
+            - rpm
 
 cache:
   directories:
@@ -23,12 +38,12 @@ cache:
 script:
   - |
     if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-      docker run --rm \
-        --env-file <(env | grep -iE 'DEBUG|NODE_|ELECTRON_|YARN_|NPM_|CI|CIRCLE|TRAVIS|APPVEYOR_|CSC_|_TOKEN|_KEY|AWS_|STRIP|BUILD_') \
-        -v ${PWD}:/project \
-        -v ~/.cache/electron:/root/.cache/electron \
-        -v ~/.cache/electron-builder:/root/.cache/electron-builder \
-        electronuserland/builder:wine \
+    #     docker run --rm \
+    #       --env-file <(env | grep -iE 'DEBUG|NODE_|ELECTRON_|YARN_|NPM_|CI|CIRCLE|TRAVIS|APPVEYOR_|CSC_|_TOKEN|_KEY|AWS_|STRIP|BUILD_') \
+    #       -v ${PWD}:/project \
+    #       -v ~/.cache/electron:/root/.cache/electron \
+    #       -v ~/.cache/electron-builder:/root/.cache/electron-builder \
+    #       electronuserland/builder:wine \
         /bin/bash -c "apt-get update && apt-get install -y fakeroot && yarn --link-duplicates --pure-lockfile && yarn make && yarn release"
     else
       yarn make && yarn release 
