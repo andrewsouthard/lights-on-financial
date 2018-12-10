@@ -42,8 +42,13 @@ my $endYear = strftime("%Y",localtime($maxDate));
 $sth->finish();
 
 my $accounts = mapAccountNames($dbh);
+my $spreadsheetName = 'budget-sheet.xlsx';
+if(defined $ARGV[1]) {
+	$spreadsheetName = $ARGV[1];
+}
+
 # The spreadsheet will be placed in the same directory as the database.
-my $outputPath = File::Spec->catfile(dirname($database),'budget-sheet.xlsx');
+my $outputPath = File::Spec->catfile(dirname($database),$spreadsheetName);
 
 my $workbook  = Excel::Writer::XLSX->new($outputPath);
 unless(defined $workbook) {

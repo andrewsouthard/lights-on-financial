@@ -302,9 +302,10 @@ const createSpreadsheet = async (event, name, shouldClearDB, filesObj) => {
         console.log(stdout.toString("utf8"));
       }
     }
-    execFileSync("perl", ["outToSpreadsheet.pl", DATABASE]);
+    execFileSync("perl", ["outToSpreadsheet.pl", DATABASE, name]);
     console.log(`new name is ${name}`);
 
+    /*
     await fs.rename(
       path.join(OUTPUT_DIR, "budget-sheet.xlsx"),
       path.join(OUTPUT_DIR, name),
@@ -314,6 +315,7 @@ const createSpreadsheet = async (event, name, shouldClearDB, filesObj) => {
         }
       }
     );
+    */
 
     /* Update the list of spreadsheets */
     await updateAppState();
