@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BACKENDDIR=$(dirname $(readlink -f ${BASH_SOURCE[0]} ))
+BACKENDDIR="./backend"
 CLEAN=0
 PREPARE_FOR_PACKAGING=1
 cd $BACKENDDIR
@@ -10,7 +10,7 @@ if [[ $CLEAN -eq 1 ]]; then
 fi
 
 if [[ ! -f ./cpanm ]]; then
-    curl -LOk http://xrl.us/cpanm
+    curl -L https://cpanmin.us/ > cpanm
     chmod +x cpanm
 fi
 INSTALL_CMD="./cpanm -L ./"
