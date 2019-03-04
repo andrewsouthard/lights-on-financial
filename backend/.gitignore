@@ -1,6 +1,5 @@
 bin/
 lib/
-cpanm
 lof.sqlite
 *.qfx
 *.ofx

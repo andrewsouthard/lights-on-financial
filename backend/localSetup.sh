@@ -11,8 +11,9 @@ fi
 
 if [[ ! -f ./cpanm ]]; then
     curl -L https://cpanmin.us/ > cpanm
-    chmod +x cpanm
 fi
+
+chmod +x cpanm
 INSTALL_CMD="./cpanm -L ./"
 
 for pkg in Class::Tiny DBD::SQLite Excel::Writer::XLSX DateTime JSON Email::Stuffer DBI Text::CSV File::Basename File::Spec

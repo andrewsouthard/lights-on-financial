@@ -6,12 +6,9 @@ REM Clean up
 rm -rf bin/
 
 REM Download cpanm and install Perl libraries
-curl -L http://xrl.us/cpanm > cpanm
+REM curl -L http://xrl.us/cpanm > cpanm
 chmod +x cpanm
-echo %path%
-echo %cd%
-dir
-cpanm -n -L . Class::Tiny DBD::SQLite Excel::Writer::XLSX DateTime JSON Email::Stuffer DBI Text::CSV File::Basename File::Spec
+cpanm -n -L "." Class::Tiny DBD::SQLite Excel::Writer::XLSX DateTime JSON Email::Stuffer DBI Text::CSV File::Basename File::Spec
 
 REM Setup Finance::OFX::Parse::Simple
 
