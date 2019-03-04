@@ -22,7 +22,7 @@ install:
   - yarn
 
 build_script:
-- backend\localSetup.bat
+- .\backend\localSetup.bat
 - yarn make
 - yarn release
 

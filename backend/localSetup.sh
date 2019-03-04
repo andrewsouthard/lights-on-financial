@@ -3,9 +3,9 @@
 BACKENDDIR=$(dirname $(readlink -f ${BASH_SOURCE[0]} ))
 CLEAN=0
 PREPARE_FOR_PACKAGING=1
+cd $BACKENDDIR
 
 if [[ $CLEAN -eq 1 ]]; then
-    cd $BACKENDDIR
     rm -rf bin/ lib/
 fi
 
