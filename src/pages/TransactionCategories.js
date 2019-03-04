@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import FontAwesomeIcon from "@fortawesome/react-fontawesome";
-import faTimes from "@fortawesome/fontawesome-free-solid/faTimes";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/fontawesome-free-solid";
 import ConfirmNavigation from "../components/ConfirmNavigation";
 
 const catRow = (cat, updateCategory, remove) => {
@@ -109,5 +109,8 @@ const mapDispatchToProps = dispatch => ({
   resetCategories: () => dispatch({ type: "RESET_CATEGORIES" }),
   updateCategory: category => dispatch({ type: "UPDATE_CATEGORY", category }),
 });
-const TransactionCategories = connect(mapStateToProps, mapDispatchToProps)(TC);
+const TransactionCategories = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TC);
 export default TransactionCategories;

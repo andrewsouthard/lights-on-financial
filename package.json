@@ -18,29 +18,43 @@
   "config": {
     "forge": {
       "make_targets": {
-        "win32": ["squirrel"],
-        "darwin": ["dmg"],
-        "linux": ["deb"]
+        "win32": [
+          "squirrel"
+        ],
+        "darwin": [
+          "dmg"
+        ],
+        "linux": [
+          "deb"
+        ]
       },
       "electronPackagerConfig": {
         "packageManager": "yarn"
       },
       "electronWinstallerConfig": {
-        "name": "LightsOnFinancial"
+        "name": "LightsOnFinancial",
+        "loadingGif": "loader.gif"
       },
       "electronInstallerDMG": {
         "icon": "icon.png"
       },
       "electronInstallerDebian": {
         "icon": "icon.png",
-        "categories": ["Utility"],
+        "categories": [
+          "Utility"
+        ],
         "homepage": "https://lightsonfinancial.com"
       },
       "electronInstallerRedhat": {
         "license": "Copyright Lights On Financial",
-        "requires": ["lsb", "libappindictor"],
+        "requires": [
+          "lsb",
+          "libappindictor"
+        ],
         "compressionLevel": 9,
-        "categories": ["Utility"]
+        "categories": [
+          "Utility"
+        ]
       },
       "github_repository": {
         "owner": "andrewsouthard",
@@ -65,7 +79,7 @@
     "electron-is": "^3.0.0",
     "electron-squirrel-startup": "^1.0.0",
     "jquery": "^3.3.1",
-    "lodash-core": "^0.8.1",
+    "lodash": "^4.17.11",
     "popper.js": "^1.14.4",
     "react": "^16.6.0",
     "react-dom": "^16.6.0",

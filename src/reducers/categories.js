@@ -1,4 +1,4 @@
-import lodash from "lodash/core";
+import { isEqual } from "lodash/core";
 
 const initialState = {
   initialList: [],
@@ -24,7 +24,7 @@ const categories = (state = initialState, action) => {
       ];
       return {
         ...state,
-        isDirty: !lodash.isEqual(state.initialList, newList),
+        isDirty: !isEqual(state.initialList, newList),
         list: newList,
       };
     case "ADD_CATEGORY":
@@ -46,7 +46,7 @@ const categories = (state = initialState, action) => {
       let setDirty = false;
       idx = state.list.findIndex(c => c.id === action.category.id);
 
-      if (idx < 0 || !lodash.isEqual(action.category, state.initialList[idx])) {
+      if (idx < 0 || !isEqual(action.category, state.initialList[idx])) {
         setDirty = true;
       }
       return {

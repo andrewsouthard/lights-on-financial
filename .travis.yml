@@ -36,9 +36,9 @@ matrix:
 script:
   - |
     if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-        /bin/bash -c "apt-get update && apt-get install -y fakeroot && yarn --link-duplicates --pure-lockfile && yarn make && yarn release"
+        /bin/bash -c "sudo apt-get update && sudo apt-get install -y fakeroot && yarn --link-duplicates --pure-lockfile && ./backend/localSetup.sh && yarn make && yarn release"
     else
-      yarn make && yarn release 
+      ./backend/localSetup.sh && yarn make && yarn release
     fi
 
 install:

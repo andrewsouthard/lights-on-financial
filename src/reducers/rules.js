@@ -1,4 +1,4 @@
-import lodash from "lodash/core";
+import { isEqual } from "lodash/core";
 
 const initialState = {
   initialList: [],
@@ -22,7 +22,7 @@ const rules = (state = initialState, action) => {
       ];
       return {
         ...state,
-        isDirty: !lodash.isEqual(state.initialList, newList),
+        isDirty: !isEqual(state.initialList, newList),
         list: newList,
       };
     case "ADD_RULE":
@@ -34,7 +34,7 @@ const rules = (state = initialState, action) => {
     case "UPDATE_RULE":
       idx = state.list.findIndex(r => r.id === action.rule.id);
       let setDirty = false;
-      if (idx < 0 || !lodash.isEqual(action.rule, state.initialList[idx])) {
+      if (idx < 0 || !isEqual(action.rule, state.initialList[idx])) {
         setDirty = true;
       }
       return {

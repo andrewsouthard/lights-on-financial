@@ -9,7 +9,7 @@ import url from "url";
 import sql from "sql.js";
 import path from "path";
 import { promisify } from "util";
-import _ from "lodash/core";
+import { isEqual } from "lodash/core";
 
 // Create a file execer object.
 import { execFileSync } from "child_process";
@@ -185,7 +185,7 @@ const saveCategories = async (event, categories) => {
     let sqlStr = "";
     /* Process all of the new and updated categories. */
     categories.forEach(cat => {
-      const existingCat = appState.categories.find(c => _.isEqual(c, cat));
+      const existingCat = appState.categories.find(c => isEqual(c, cat));
       if (!existingCat) {
         if (typeof cat.id !== "number") {
           sqlStr += `INSERT INTO categories VALUES(NULL,"${cat.name}","${
@@ -230,7 +230,7 @@ const saveRules = async (event, rules) => {
     let sqlStr = "";
     /* Process all of the new and updated rules */
     rules.forEach(rule => {
-      const existingRule = appState.rules.find(r => _.isEqual(r, rule));
+      const existingRule = appState.rules.find(r => isEqual(r, rule));
       if (!existingRule) {
         if (typeof rule.id !== "number") {
           sqlStr += `INSERT INTO rules VALUES(NULL,"${rule.name}","${

@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import FontAwesomeIcon from "@fortawesome/react-fontawesome";
-import faTimes from "@fortawesome/fontawesome-free-solid/faTimes";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/fontawesome-free-solid";
 import CategorySelector from "../components/CategorySelector";
 import ConfirmNavigation from "../components/ConfirmNavigation";
 
@@ -98,5 +98,8 @@ const mapDispatchToProps = dispatch => ({
   removeRule: rule => dispatch({ type: "REMOVE_RULE", rule }),
   resetRules: () => dispatch({ type: "RESET_RULES" }),
 });
-const TaggingRules = connect(mapStateToProps, mapDispatchToProps)(TR);
+const TaggingRules = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TR);
 export default TaggingRules;
