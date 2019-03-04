@@ -9,6 +9,7 @@ environment:
 cache:
   - node_modules
   - '%USERPROFILE%\.electron'
+  - C:\strawberry
 
 init:
   - git config --global core.autocrlf input
@@ -20,6 +21,8 @@ branches:
 install:
   - ps: Install-Product node 8 x64
   - yarn
+  - if not exist "C:\strawberry" choco install --yes strawberryperl
+  - set PATH=C:\strawberry\perl\bin;C:\strawberry\perl\site\bin;C:\strawberry\c\bin;%PATH%
 
 build_script:
 - .\backend\localSetup.bat
