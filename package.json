@@ -33,7 +33,8 @@
       },
       "electronWinstallerConfig": {
         "name": "LightsOnFinancial",
-        "loadingGif": "loader.gif"
+        "loadingGif": "loader.gif",
+        "setupIcon": "icon.png"
       },
       "electronInstallerDMG": {
         "icon": "icon.png"
