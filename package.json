@@ -18,15 +18,9 @@
   "config": {
     "forge": {
       "make_targets": {
-        "win32": [
-          "squirrel"
-        ],
-        "darwin": [
-          "dmg"
-        ],
-        "linux": [
-          "deb"
-        ]
+        "win32": ["squirrel"],
+        "darwin": ["dmg"],
+        "linux": ["deb"]
       },
       "electronPackagerConfig": {
         "packageManager": "yarn"
@@ -34,28 +28,21 @@
       "electronWinstallerConfig": {
         "name": "LightsOnFinancial",
         "loadingGif": "loader.gif",
-        "setupIcon": "icon.png"
+        "setupIcon": "icon.ico"
       },
       "electronInstallerDMG": {
         "icon": "icon.png"
       },
       "electronInstallerDebian": {
         "icon": "icon.png",
-        "categories": [
-          "Utility"
-        ],
+        "categories": ["Utility"],
         "homepage": "https://lightsonfinancial.com"
       },
       "electronInstallerRedhat": {
         "license": "Copyright Lights On Financial",
-        "requires": [
-          "lsb",
-          "libappindictor"
-        ],
+        "requires": ["lsb", "libappindictor"],
         "compressionLevel": 9,
-        "categories": [
-          "Utility"
-        ]
+        "categories": ["Utility"]
       },
       "github_repository": {
         "owner": "andrewsouthard",
