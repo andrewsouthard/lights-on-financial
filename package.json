@@ -31,7 +31,7 @@
         "setupIcon": "icon.ico"
       },
       "electronInstallerDMG": {
-        "icon": "icon.png"
+        "setupIcon": "icon.icns"
       },
       "electronInstallerDebian": {
         "icon": "icon.png",

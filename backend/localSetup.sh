@@ -16,7 +16,7 @@ fi
 chmod +x cpanm
 INSTALL_CMD="./cpanm -L ./"
 
-for pkg in Class::Tiny DBD::SQLite Excel::Writer::XLSX DateTime JSON Email::Stuffer DBI Text::CSV File::Basename File::Spec
+for pkg in Class::Tiny DBD::SQLite Excel::Writer::XLSX DateTime JSON Email::Stuffer DBI Text::CSV File::Basename File::Spec Date::Parse
 do
     $INSTALL_CMD $pkg
 done

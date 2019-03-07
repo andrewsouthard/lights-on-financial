@@ -1,8 +1,8 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-import FontAwesomeIcon from "@fortawesome/react-fontawesome";
-import faSpinner from "@fortawesome/fontawesome-free-solid/faSpinner";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/fontawesome-free-solid";
 
 class Pending extends React.Component {
   render() {

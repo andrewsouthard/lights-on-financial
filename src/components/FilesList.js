@@ -1,8 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import path from "path";
-import FontAwesomeIcon from "@fortawesome/react-fontawesome";
-import faTimes from "@fortawesome/fontawesome-free-solid/faTimes";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/fontawesome-free-solid";
 
 const FileRow = (file, removeFile, updateFilename) => {
   const filename = path.basename(file);
@@ -34,7 +34,7 @@ class Files extends React.Component {
         <table
           id="files"
           className="table table-condensed table-striped"
-          style={{ display: this.props.files.length ? "initial" : "none" }}>
+          style={{ display: files.length ? "initial" : "none" }}>
           <tbody>
             <tr>
               <th>Remove</th>
@@ -60,5 +60,8 @@ const mapDispatchToProps = dispatch => ({
   updateFilename: (file, name) =>
     dispatch({ type: "UPDATE_IMPORT_FILENAME", file, name }),
 });
-const FilesList = connect(mapStateToProps, mapDispatchToProps)(Files);
+const FilesList = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Files);
 export default FilesList;

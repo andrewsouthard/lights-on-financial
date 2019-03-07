@@ -133,7 +133,7 @@ function* processError(action) {
     }
     dialog.showMessageBox({
       type: "info",
-      message: action.message.toString(),
+      message: "Error while creating spreadsheet! " + action.message.toString(),
       buttons: ["Ok"],
       defaultId: 1,
     });
